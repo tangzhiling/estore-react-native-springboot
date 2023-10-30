@@ -85,7 +85,7 @@ const LoginPage = () => {
                             backgroundColor: "#D0D0D0",
                             paddingVertical: 5,
                             borderRadius: 5,
-                            marginTop: 40
+                            marginTop: 20
                         }}
                     >
 
