@@ -7,32 +7,52 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
- * Inventory of a product that available for purchase.
+ * The quantity ordered of a product.
  */
 @Entity
-@Table(name = "inventory")
-public class Inventory {
+@Table(name = "web_order_quantities")
+public class WebOrderQuantities {
 
-  /** Unique id for the inventory. */
+  /** The unqiue id of the order quantity. */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Long id;
-  /** The product this inventory is of. */
-  @JsonIgnore
-  @OneToOne(optional = false, orphanRemoval = true)
-  @JoinColumn(name = "product_id", nullable = false, unique = true)
+  /** The product being ordered. */
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "product_id", nullable = false)
   private Product product;
-  /** The quantity in stock. */
+  /** The quantity being ordered. */
   @Column(name = "quantity", nullable = false)
   private Integer quantity;
+  /** The order itself. */
+  @JsonIgnore
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "order_id", nullable = false)
+  private WebOrder order;
 
   /**
-   * Gets the quantity in stock.
+   * Gets the order.
+   * @return The order.
+   */
+  public WebOrder getOrder() {
+    return order;
+  }
+
+  /**
+   * Sets the order.
+   * @param order The order.
+   */
+  public void setOrder(WebOrder order) {
+    this.order = order;
+  }
+
+  /**
+   * Gets the quantity ordered.
    * @return The quantity.
    */
   public Integer getQuantity() {
@@ -40,15 +60,15 @@ public class Inventory {
   }
 
   /**
-   * Sets the quantity in stock of the product.
-   * @param quantity The quantity to be set.
+   * Sets the quantity ordered.
+   * @param quantity The quantity.
    */
   public void setQuantity(Integer quantity) {
     this.quantity = quantity;
   }
 
   /**
-   * Gets the product.
+   * Gets the product ordered.
    * @return The product.
    */
   public Product getProduct() {
@@ -57,23 +77,23 @@ public class Inventory {
 
   /**
    * Sets the product.
-   * @param product The product to be set.
+   * @param product The product.
    */
   public void setProduct(Product product) {
     this.product = product;
   }
 
   /**
-   * Gets the ID of the inventory.
-   * @return The ID.
+   * Gets the id.
+   * @return The id.
    */
   public Long getId() {
     return id;
   }
 
   /**
-   * Sets the ID of the inventory.
-   * @param id The ID.
+   * Sets the id.
+   * @param id The id.
    */
   public void setId(Long id) {
     this.id = id;
