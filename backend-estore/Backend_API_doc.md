@@ -81,8 +81,6 @@
 
 
 
-
-
 ## 注册
 
 ##### 简要描述
@@ -171,6 +169,12 @@
 
 
 
+
+
+
+
+
+
 ## 获取用户信息
 
 ##### 简要描述
@@ -226,6 +230,12 @@
 | nickName  | string | 昵称   |
 | avatar    | object | 头像   |
 | password2 | object | 无     |
+
+
+
+
+
+
 
 
 
@@ -307,6 +317,10 @@
 
 
 
+
+
+
+
 ## 获取订单列表(需token)
 
 ##### 简要描述
@@ -376,6 +390,12 @@
 | couponId     | object | 无             |
 | code         | string | 无             |
 | msg          | string | 无             |
+
+
+
+
+
+
 
 
 
@@ -458,6 +478,10 @@
 | createTime   | string | 订单创建时间   |
 | code         | string | 无             |
 | msg          | string | 无             |
+
+
+
+
 
 
 
