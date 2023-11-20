@@ -1,107 +1,105 @@
-//import { StatusBar } from 'expo-status-bar';
-
-/*
-export default function App() {
-  return (
-    <>
-        <StackNavigator></StackNavigator>
-    </>
-  );
-}
-*/
-/*
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-*/
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
-import { ProductsList } from './screens/ProductsList.js';
-import { ProductDetails } from './screens/ProductDetails.js';
-import { Cart } from './screens/Cart.js';
-import { CartIcon } from './components/CartIcon.js';
-import { CartProvider } from './CartContext.js';
-import LoginScreen from './screens/Login.js';
-import RegisterScreen from './screens/Register.js';
-import StackNavigator from './navigation/StackNavigator';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts } from "expo-font";
+import { useCallback } from "react";
+import BottomTabNavigation from './navigation/BottomTabNavigation';
+import { Cart, Favorites, Details, Products, LoginPage, Signup, Profile } from './screens';
+import Orders from "./screens/Orders";
 
 const Stack = createNativeStackNavigator();
+//we are going creates a native stack navigator  using the createNativeStackNavigator function.
 
-function App() {
+// Defining the main App component
+export default function App() {
+
+  // Step One
+  // Loading custom fonts using the useFonts hook
+  const [fontsLoaded] = useFonts({
+    regular: require("./assets/fonts/Poppins-Regular.ttf"), // Loading a font file for regular style
+    light: require("./assets/fonts/Poppins-Light.ttf"), // Loading a font file for light style
+    bold: require("./assets/fonts/Poppins-Bold.ttf"), // Loading a font file for bold style
+    semibold: require("./assets/fonts/Poppins-SemiBold.ttf"), // Loading a font file for semi-bold style
+    medium: require("./assets/fonts/Poppins-Medium.ttf"), // Loading a font file for medium style
+    extrabold: require("./assets/fonts/Poppins-ExtraBold.ttf") // Loading a font file for extra bold style
+  })
+  // Defining a callback function to be called when the root view layout changes
+  const onLayoutRootView = useCallback(async () => {
+    // Checking if the fonts have been loaded
+    if (fontsLoaded) {
+
+      // Hiding the splash screen asynchronously
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  // If the fonts are not loaded yet
+  if (!fontsLoaded) {
+    // Return null to render nothing (possibly displaying a loading indicator)
+    return null;
+  }
+
   return (
-    /* { <CartProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
+    //  1.   // Wrapping the app with the NavigationContainer component
+    //  this serves as a container or wrapper that holds the navigation state and provides an essential context for navigation within your app
 
-          <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
-          <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false }} />
-          <Stack.Screen name='Products' component={ProductsList}
-            options={({ navigation }) => ({
-              title: '商品列表',
-              headerTitleStyle: styles.headerTitle,
-              headerRight: () => <CartIcon navigation={navigation} />
-            })} />
-          <Stack.Screen name='ProductDetails' component={ProductDetails}
-            options={({ navigation }) => ({
-              title: 'Product 商品详情',
-              headerTitleStyle: styles.headerTitle,
-              headerRight: () => <CartIcon navigation={navigation} />,
-            })} />
-          <Stack.Screen name='Cart' component={Cart}
-            options={({ navigation }) => ({
-              title: '购物车',
-              headerTitleStyle: styles.headerTitle,
-              headerRight: () => <CartIcon navigation={navigation} />,
-            })} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </CartProvider> } */
-    <StackNavigator></StackNavigator>
+    //  2. //  Stack navigator the one we created on top can be used to define screen components 
+    // and navigation options. in short this component which manages the child screens.
 
-/*     <NavigationContainer>
+
+    //  3. // To add Screens to our stack we use Stack.Screen component
+
+    <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name='Bottom Navigation'
+          component={BottomTabNavigation}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='Details'
+          component={Details}
+          options={{ headerShown: false }}
+        />
 
-        <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
-        <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false }} />
-        
-        <Stack.Screen name='Products' component={ProductsList}
-          options={({ navigation }) => ({
-            title: '商品列表',
-            headerTitleStyle: styles.headerTitle,
-            headerRight: () => <CartIcon navigation={navigation} />
-          })} />
-        <Stack.Screen name='ProductDetails' component={ProductDetails}
-          options={({ navigation }) => ({
-            title: 'Product 商品详情',
-            headerTitleStyle: styles.headerTitle,
-            headerRight: () => <CartIcon navigation={navigation} />,
-          })} />
-        <Stack.Screen name='Cart' component={Cart}
-          options={({ navigation }) => ({
-            title: '购物车',
-            headerTitleStyle: styles.headerTitle,
-            headerRight: () => <CartIcon navigation={navigation} />,
-          })} />
+        <Stack.Screen
+          name='Cart'
+          component={Cart}
+          options={{ headerShown: false }}
+        />
 
+        <Stack.Screen
+          name='Orders'
+          component={Orders}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name='Login'
+          component={LoginPage}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name='Signup'
+          component={Signup}
+          options={{ headerShown: false }}
+        />
+
+
+        <Stack.Screen
+          name='Favorites'
+          component={Favorites}
+          options={{ headerShown: false }}
+        />
+
+<Stack.Screen
+          name='Profile'
+          component={Profile}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
-    </NavigationContainer> */
-
-
-
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  headerTitle: {
-    fontSize: 20
-  }
-});
-
-export default App;

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "estore",
-    "slug": "estore",
+    "name": "prototype",
+    "slug": "prototype",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
