@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.estore.project.mapper.ProShoppingMapper">
+    
+    <resultMap type="ProShopping" id="ProShoppingResult">
+        <result property="shoppingId"    column="shopping_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="count"    column="count"    />
+        <result property="isCheck"    column="is_check"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectProShoppingVo">
+        SELECT
+            a.shopping_id,
+            a.user_id,
+            a.product_id,
+            a.count,
+            a.is_check,
+            a.create_time,
+            b.image as image,
+            b.title as title,
+            b.price as price,
+            c.scale as scale,
+            c.title as eventsTitle,
+            (CASE
+                 WHEN c.scale IS NOT NULL
+                     THEN b.price * c.scale
+                 ELSE b.price
+                END) as eventsPrice,
+            (CASE
+                 WHEN c.scale IS NOT NULL
+                     THEN b.price * c.scale * a.count
+                 ELSE b.price * a.count
+                END) as countPrice
+        FROM
+            pro_shopping a
+        left join pro_product b on a.product_id = b.product_id
+        left join pro_events c on b.classify_id = c.classify_id
+    </sql>
+
+    <select id="selectProShoppingList" parameterType="ProShopping" resultMap="ProShoppingResult">
+        <include refid="selectProShoppingVo"/>
+        <where>  
+            <if test="userId != null "> and a.user_id = #{userId}</if>
+            <if test="productId != null "> and a.product_id = #{productId}</if>
+            <if test="count != null "> and a.count = #{count}</if>
+            <if test="isCheck != null  and isCheck != ''"> and a.is_check = #{isCheck}</if>
+        </where>
+    </select>
+    
+    <select id="selectProShoppingByShoppingId" parameterType="Long" resultMap="ProShoppingResult">
+        <include refid="selectProShoppingVo"/>
+        where a.shopping_id = #{shoppingId}
+    </select>
+
+    <select id="selectProShoppingByUserIdAndProductId" parameterType="ProShopping" resultMap="ProShoppingResult">
+        <include refid="selectProShoppingVo"/>
+        where a.user_id = #{userId} and a.product_id = #{productId}
+    </select>
+        
+    <insert id="insertProShopping" parameterType="ProShopping" useGeneratedKeys="true" keyProperty="shoppingId">
+        insert into pro_shopping
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="count != null">count,</if>
+            <if test="isCheck != null">is_check,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="count != null">#{count},</if>
+            <if test="isCheck != null">#{isCheck},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProShopping" parameterType="ProShopping">
+        update pro_shopping
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="count != null">count = #{count},</if>
+            <if test="isCheck != null">is_check = #{isCheck},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where shopping_id = #{shoppingId}
+    </update>
+
+    <delete id="deleteProShoppingByShoppingId" parameterType="Long">
+        delete from pro_shopping where shopping_id = #{shoppingId}
+    </delete>
+
+    <delete id="deleteProShoppingByShoppingIds" parameterType="String">
+        delete from pro_shopping where shopping_id in 
+        <foreach item="shoppingId" collection="array" open="(" separator="," close=")">
+            #{shoppingId}
+        </foreach>
+    </delete>
+</mapper>

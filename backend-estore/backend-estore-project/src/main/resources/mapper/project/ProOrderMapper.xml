@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.estore.project.mapper.ProOrderMapper">
+
+    <resultMap type="ProOrder" id="ProOrderResult">
+        <result property="orderId"    column="order_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="count"    column="count"    />
+        <result property="countPrice"    column="count_price"    />
+        <result property="couponPrice"    column="coupon_price"    />
+        <result property="eventsPrice"    column="events_price"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+        <result property="positionProvince"    column="position_province"    />
+        <result property="positionCity"    column="position_city"    />
+        <result property="positionArea"    column="position_area"    />
+        <result property="detailsPosition"    column="details_position"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+
+    </resultMap>
+
+    <sql id="selectProOrderVo">
+        SELECT
+            a.order_id,
+            a.user_id,
+            a.product_id,
+            a.count,
+            a.count_price,
+            a.coupon_price,
+            a.events_price,
+            a.create_time,
+            a.status,
+            a.position_province,
+            a.position_city,
+            a.position_area,
+            a.details_position,
+            a.name,
+            a.phone,
+            b.image as image,
+            b.price as productPrice,
+            b.title as title
+        FROM
+            pro_order a left join pro_product b on a.product_id  = b.product_id
+    </sql>
+
+    <select id="selectProOrderList" parameterType="ProOrder" resultMap="ProOrderResult">
+        <include refid="selectProOrderVo"/>
+        <where>
+            <if test="userId != null "> and a.user_id = #{userId}</if>
+            <if test="productId != null "> and a.product_id = #{productId}</if>
+            <if test="count != null "> and a.count = #{count}</if>
+            <if test="countPrice != null "> and a.count_price = #{countPrice}</if>
+            <if test="couponPrice != null "> and a.coupon_price = #{couponPrice}</if>
+            <if test="eventsPrice != null "> and a.events_price = #{eventsPrice}</if>
+            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and a.phone = #{phone}</if>
+        </where>
+    </select>
+
+    <select id="selectProOrderByOrderId" parameterType="String" resultMap="ProOrderResult">
+        <include refid="selectProOrderVo"/>
+        where a.order_id = #{orderId}
+    </select>
+
+    <insert id="insertProOrder" parameterType="ProOrder">
+        insert into pro_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">order_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="count != null">count,</if>
+            <if test="countPrice != null">count_price,</if>
+            <if test="couponPrice != null">coupon_price,</if>
+            <if test="eventsPrice != null">events_price,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="status != null">status,</if>
+            <if test="positionProvince != null">position_province,</if>
+            <if test="positionCity != null">position_city,</if>
+            <if test="positionArea != null">position_area,</if>
+            <if test="detailsPosition != null">details_position,</if>
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="count != null">#{count},</if>
+            <if test="countPrice != null">#{countPrice},</if>
+            <if test="couponPrice != null">#{couponPrice},</if>
+            <if test="eventsPrice != null">#{eventsPrice},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="positionProvince != null">#{positionProvince},</if>
+            <if test="positionCity != null">#{positionCity},</if>
+            <if test="positionArea != null">#{positionArea},</if>
+            <if test="detailsPosition != null">#{detailsPosition},</if>
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+        </trim>
+    </insert>
+
+    <update id="updateProOrder" parameterType="ProOrder">
+        update pro_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="count != null">count = #{count},</if>
+            <if test="countPrice != null">count_price = #{countPrice},</if>
+            <if test="couponPrice != null">coupon_price = #{couponPrice},</if>
+            <if test="eventsPrice != null">events_price = #{eventsPrice},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="positionProvince != null">position_province = #{positionProvince},</if>
+            <if test="positionCity != null">position_city = #{positionCity},</if>
+            <if test="positionArea != null">position_area = #{positionArea},</if>
+            <if test="detailsPosition != null">details_position = #{detailsPosition},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+        </trim>
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteProOrderByOrderId" parameterType="String">
+        delete from pro_order where order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteProOrderByOrderIds" parameterType="String">
+        delete from pro_order where order_id in
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.estore.project.mapper.ProProductMapper">
+
+    <resultMap type="ProProduct" id="ProProductResult">
+        <result property="productId"    column="product_id"    />
+        <result property="classifyId"    column="classify_id"    />
+        <result property="title"    column="title"    />
+        <result property="price"    column="price"    />
+        <result property="image"    column="image"    />
+        <result property="image2s"    column="image2s"    />
+        <result property="inventoryCount"    column="inventory_count"    />
+        <result property="salesCount"    column="sales_count"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="sort"    column="sort"    />
+        <result property="classifyName"    column="classifyName"    />
+        <result property="scale"    column="scale"    />
+        <result property="eventsTitle"    column="eventsTitle"    />
+        <result property="eventsPrice"    column="eventsPrice"    />
+
+    </resultMap>
+
+    <sql id="selectProProductVo">
+        SELECT
+            a.product_id,
+            a.classify_id,
+            a.title,
+            a.price,
+            a.image,
+            a.image2s,
+            a.inventory_count,
+            a.sales_count,
+            a.create_time,
+            a.sort,
+            b.name as classifyName,
+            c.scale as scale,
+            c.title as eventsTitle,
+            (CASE
+            WHEN c.scale IS NOT NULL
+             THEN a.price * c.scale
+             ELSE a.price
+            END) as eventsPrice
+        FROM
+            pro_product a
+        left join pro_classify b on a.classify_id = b.classify_id
+        left join pro_events c on a.classify_id = c.classify_id
+    </sql>
+
+    <select id="selectProProductList" parameterType="ProProduct" resultMap="ProProductResult">
+        <include refid="selectProProductVo"/>
+        <where>
+            <if test="classifyId != null  and classifyId != ''"> and a.classify_id = #{classifyId}</if>
+            <if test="title != null  and title != ''"> and a.title = #{title}</if>
+            <if test="price != null "> and a.price = #{price}</if>
+            <if test="image != null  and image != ''"> and a.image = #{image}</if>
+            <if test="image2s != null  and image2s != ''"> and a.image2s = #{image2s}</if>
+            <if test="inventoryCount != null "> and a.inventory_count = #{inventoryCount}</if>
+            <if test="salesCount != null "> and a.sales_count = #{salesCount}</if>
+            <if test="sort != null "> and a.sort = #{sort}</if>
+        </where>
+        order by a.create_time desc
+    </select>
+
+    <select id="selectProProductByProductId" parameterType="Long" resultMap="ProProductResult">
+        <include refid="selectProProductVo"/>
+        where a.product_id = #{productId}
+    </select>
+
+    <insert id="insertProProduct" parameterType="ProProduct">
+        insert into pro_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">product_id,</if>
+            <if test="classifyId != null">classify_id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="price != null">price,</if>
+            <if test="image != null and image != ''">image,</if>
+            <if test="image2s != null and image2s != ''">image2s,</if>
+            <if test="inventoryCount != null">inventory_count,</if>
+            <if test="salesCount != null">sales_count,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="sort != null">sort,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">#{productId},</if>
+            <if test="classifyId != null">#{classifyId},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="price != null">#{price},</if>
+            <if test="image != null and image != ''">#{image},</if>
+            <if test="image2s != null and image2s != ''">#{image2s},</if>
+            <if test="inventoryCount != null">#{inventoryCount},</if>
+            <if test="salesCount != null">#{salesCount},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="sort != null">#{sort},</if>
+        </trim>
+    </insert>
+
+    <update id="updateProProduct" parameterType="ProProduct">
+        update pro_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="classifyId != null">classify_id = #{classifyId},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="image2s != null and image2s != ''">image2s = #{image2s},</if>
+            <if test="inventoryCount != null">inventory_count = #{inventoryCount},</if>
+            <if test="salesCount != null">sales_count = #{salesCount},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="sort != null">sort = #{sort},</if>
+        </trim>
+        where product_id = #{productId}
+    </update>
+
+    <delete id="deleteProProductByProductId" parameterType="Long">
+        delete from pro_product where product_id = #{productId}
+    </delete>
+
+    <delete id="deleteProProductByProductIds" parameterType="String">
+        delete from pro_product where product_id in
+        <foreach item="productId" collection="array" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </delete>
+</mapper>

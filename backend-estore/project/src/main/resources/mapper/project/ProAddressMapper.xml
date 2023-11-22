@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.estore.project.mapper.ProAddressMapper">
+
+    <resultMap type="ProAddress" id="ProAddressResult">
+        <result property="addressId"    column="address_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="positionProvince"    column="position_province"    />
+        <result property="positionCity"    column="position_city"    />
+        <result property="positionArea"    column="position_area"    />
+        <result property="detailsPosition"    column="details_position"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="isDefault"    column="is_default"    />
+    </resultMap>
+
+    <sql id="selectProAddressVo">
+        select address_id, user_id, name, phone, position_province, position_city, position_area, details_position, longitude, latitude, create_time, is_default from pro_address
+    </sql>
+
+    <select id="selectProAddressList" parameterType="ProAddress" resultMap="ProAddressResult">
+        <include refid="selectProAddressVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="positionProvince != null  and positionProvince != ''"> and position_province = #{positionProvince}</if>
+            <if test="positionCity != null  and positionCity != ''"> and position_city = #{positionCity}</if>
+            <if test="positionArea != null  and positionArea != ''"> and position_area = #{positionArea}</if>
+            <if test="detailsPosition != null  and detailsPosition != ''"> and details_position = #{detailsPosition}</if>
+            <if test="longitude != null "> and longitude = #{longitude}</if>
+            <if test="latitude != null "> and latitude = #{latitude}</if>
+            <if test="isDefault != null  and isDefault != ''"> and is_default = #{isDefault}</if>
+        </where>
+    </select>
+
+    <select id="selectProAddressByAddressId" parameterType="Long" resultMap="ProAddressResult">
+        <include refid="selectProAddressVo"/>
+        where address_id = #{addressId}
+    </select>
+
+    <insert id="insertProAddress" parameterType="ProAddress">
+        insert into pro_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="addressId != null">address_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="positionProvince != null">position_province,</if>
+            <if test="positionCity != null">position_city,</if>
+            <if test="positionArea != null">position_area,</if>
+            <if test="detailsPosition != null">details_position,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="isDefault != null">is_default,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="addressId != null">#{addressId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="positionProvince != null">#{positionProvince},</if>
+            <if test="positionCity != null">#{positionCity},</if>
+            <if test="positionArea != null">#{positionArea},</if>
+            <if test="detailsPosition != null">#{detailsPosition},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="isDefault != null">#{isDefault},</if>
+        </trim>
+    </insert>
+
+    <update id="updateProAddress" parameterType="ProAddress">
+        update pro_address
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="positionProvince != null">position_province = #{positionProvince},</if>
+            <if test="positionCity != null">position_city = #{positionCity},</if>
+            <if test="positionArea != null">position_area = #{positionArea},</if>
+            <if test="detailsPosition != null">details_position = #{detailsPosition},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+        </trim>
+        where address_id = #{addressId}
+    </update>
+
+    <delete id="deleteProAddressByAddressId" parameterType="Long">
+        delete from pro_address where address_id = #{addressId}
+    </delete>
+
+    <delete id="deleteProAddressByAddressIds" parameterType="String">
+        delete from pro_address where address_id in
+        <foreach item="addressId" collection="array" open="(" separator="," close=")">
+            #{addressId}
+        </foreach>
+    </delete>
+</mapper>

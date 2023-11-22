@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.estore.project.mapper.ProEventsMapper">
+
+    <resultMap type="ProEvents" id="ProEventsResult">
+        <result property="eventsId"    column="events_id"    />
+        <result property="title"    column="title"    />
+        <result property="image"    column="image"    />
+        <result property="content"    column="content"    />
+        <result property="price"    column="price"    />
+        <result property="scale"    column="scale"    />
+        <result property="classifyId"    column="classify_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectProEventsVo">
+        select events_id, title, image, content, price, scale, classify_id, create_time from pro_events
+    </sql>
+
+    <select id="selectProEventsList" parameterType="ProEvents" resultMap="ProEventsResult">
+        <include refid="selectProEventsVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="image != null  and image != ''"> and image = #{image}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="scale != null "> and scale = #{scale}</if>
+            <if test="classifyId != null  and classifyId != ''"> and classify_id = #{classifyId}</if>
+        </where>
+    </select>
+
+    <select id="selectProEventsByEventsId" parameterType="Long" resultMap="ProEventsResult">
+        <include refid="selectProEventsVo"/>
+        where events_id = #{eventsId}
+    </select>
+
+    <select id="selectProEventsByClassifyId" parameterType="Long" resultMap="ProEventsResult">
+        <include refid="selectProEventsVo"/>
+        where classify_id = #{classifyId}
+    </select>
+
+    <insert id="insertProEvents" parameterType="ProEvents" useGeneratedKeys="true" keyProperty="eventsId">
+        insert into pro_events
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="image != null">image,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="price != null">price,</if>
+            <if test="scale != null">scale,</if>
+            <if test="classifyId != null">classify_id,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="image != null">#{image},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="price != null">#{price},</if>
+            <if test="scale != null">#{scale},</if>
+            <if test="classifyId != null">#{classifyId},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateProEvents" parameterType="ProEvents">
+        update pro_events
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="scale != null">scale = #{scale},</if>
+            <if test="classifyId != null">classify_id = #{classifyId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where events_id = #{eventsId}
+    </update>
+
+    <delete id="deleteProEventsByEventsId" parameterType="Long">
+        delete from pro_events where events_id = #{eventsId}
+    </delete>
+
+    <delete id="deleteProEventsByEventsIds" parameterType="String">
+        delete from pro_events where events_id in
+        <foreach item="eventsId" collection="array" open="(" separator="," close=")">
+            #{eventsId}
+        </foreach>
+    </delete>
+</mapper>

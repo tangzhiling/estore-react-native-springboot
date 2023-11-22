@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.estore.project.mapper.ProOrderChildMapper">
+
+    <resultMap type="ProOrderChild" id="ProOrderChildResult">
+        <result property="childId"    column="child_id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="count"    column="count"    />
+        <result property="price"    column="price"    />
+        <result property="countPrice"    column="count_price"    />
+        <result property="title"    column="title"    />
+        <result property="image"    column="image"    />
+    </resultMap>
+
+    <sql id="selectProOrderChildVo">
+        SELECT
+            a.child_id,
+            a.order_id,
+            a.product_id,
+            a.count,
+            a.price,
+            a.count_price,
+            b.title as title,
+            b.image as image
+        FROM
+            pro_order_child a left join pro_product b on a.product_id = b.product_id    </sql>
+
+    <select id="selectProOrderChildList" parameterType="ProOrderChild" resultMap="ProOrderChildResult">
+        <include refid="selectProOrderChildVo"/>
+        <where>
+            <if test="orderId != null  and orderId != ''"> and a.order_id = #{orderId}</if>
+            <if test="productId != null "> and a.product_id = #{productId}</if>
+            <if test="count != null "> and a.count = #{count}</if>
+            <if test="price != null "> and a.price = #{price}</if>
+            <if test="countPrice != null "> and a.count_price = #{countPrice}</if>
+        </where>
+    </select>
+
+    <select id="selectProOrderChildByChildId" parameterType="Long" resultMap="ProOrderChildResult">
+        <include refid="selectProOrderChildVo"/>
+        where a.child_id = #{childId}
+    </select>
+
+    <insert id="insertProOrderChild" parameterType="ProOrderChild">
+        insert into pro_order_child
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="childId != null">child_id,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="count != null">count,</if>
+            <if test="price != null">price,</if>
+            <if test="countPrice != null">count_price,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="childId != null">#{childId},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="count != null">#{count},</if>
+            <if test="price != null">#{price},</if>
+            <if test="countPrice != null">#{countPrice},</if>
+        </trim>
+    </insert>
+
+    <update id="updateProOrderChild" parameterType="ProOrderChild">
+        update pro_order_child
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="count != null">count = #{count},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="countPrice != null">count_price = #{countPrice},</if>
+        </trim>
+        where child_id = #{childId}
+    </update>
+
+    <delete id="deleteProOrderChildByChildId" parameterType="Long">
+        delete from pro_order_child where child_id = #{childId}
+    </delete>
+
+    <delete id="deleteProOrderChildByChildIds" parameterType="String">
+        delete from pro_order_child where child_id in
+        <foreach item="childId" collection="array" open="(" separator="," close=")">
+            #{childId}
+        </foreach>
+    </delete>
+</mapper>

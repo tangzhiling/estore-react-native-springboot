@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.estore.project.mapper.ProCouponMapper">
+    
+    <resultMap type="ProCoupon" id="ProCouponResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="status"    column="status"    />
+        <result property="type"    column="type"    />
+        <result property="discount"    column="discount"    />
+        <result property="condition"    column="condition"    />
+        <result property="activeTime"    column="active_time"    />
+        <result property="expiredTime"    column="expired_time"    />
+        <result property="range"    column="range"    />
+    </resultMap>
+
+    <sql id="selectProCouponVo">
+        select id, user_id, status, type, discount, `condition`, active_time, expired_time, `range` from pro_coupon
+    </sql>
+
+    <select id="selectProCouponList" parameterType="ProCoupon" resultMap="ProCouponResult">
+        <include refid="selectProCouponVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="discount != null  and discount != ''"> and discount = #{discount}</if>
+            <if test="condition != null  and condition != ''"> and `condition` = #{condition}</if>
+            <if test="activeTime != null "> and active_time = #{activeTime}</if>
+            <if test="expiredTime != null "> and expired_time = #{expiredTime}</if>
+            <if test="range != null  and range != ''"> and `range` = #{range}</if>
+        </where>
+    </select>
+
+    <select id="selectProCouponById" parameterType="Long" resultMap="ProCouponResult">
+        <include refid="selectProCouponVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertProCoupon" parameterType="ProCoupon">
+        insert into pro_coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="status != null">status,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="discount != null and discount != ''">discount,</if>
+            <if test="condition != null and condition != ''">`condition`,</if>
+            <if test="activeTime != null">active_time,</if>
+            <if test="expiredTime != null">expired_time,</if>
+            <if test="range != null and range != ''">`range`,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="discount != null and discount != ''">#{discount},</if>
+            <if test="condition != null and condition != ''">#{condition},</if>
+            <if test="activeTime != null">#{activeTime},</if>
+            <if test="expiredTime != null">#{expiredTime},</if>
+            <if test="range != null and range != ''">#{range},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateProCoupon" parameterType="ProCoupon">
+        update pro_coupon
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="discount != null and discount != ''">discount = #{discount},</if>
+            <if test="condition != null and condition != ''">`condition` = #{condition},</if>
+            <if test="activeTime != null">active_time = #{activeTime},</if>
+            <if test="expiredTime != null">expired_time = #{expiredTime},</if>
+            <if test="range != null and range != ''">`range` = #{range},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProCouponById" parameterType="Long">
+        delete from pro_coupon where id = #{id}
+    </delete>
+
+    <delete id="deleteProCouponByIds" parameterType="String">
+        delete from pro_coupon where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

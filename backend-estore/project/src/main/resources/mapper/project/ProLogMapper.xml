@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.estore.project.mapper.ProLogMapper">
+    
+    <resultMap type="ProLog" id="ProLogResult">
+        <result property="logId"    column="log_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="method"    column="method"    />
+        <result property="packageName"    column="package_name"    />
+        <result property="className"    column="class_name"    />
+        <result property="requstName"    column="requst_name"    />
+        <result property="ip"    column="ip"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectProLogVo">
+        select log_id, user_id, method, package_name, class_name, requst_name, ip, create_time from pro_log
+    </sql>
+
+    <select id="selectProLogList" parameterType="ProLog" resultMap="ProLogResult">
+        <include refid="selectProLogVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="method != null  and method != ''"> and method = #{method}</if>
+            <if test="packageName != null  and packageName != ''"> and package_name like concat('%', #{packageName}, '%')</if>
+            <if test="className != null  and className != ''"> and class_name like concat('%', #{className}, '%')</if>
+            <if test="requstName != null  and requstName != ''"> and requst_name like concat('%', #{requstName}, '%')</if>
+            <if test="ip != null  and ip != ''"> and ip = #{ip}</if>
+        </where>
+    </select>
+    
+    <select id="selectProLogByLogId" parameterType="Long" resultMap="ProLogResult">
+        <include refid="selectProLogVo"/>
+        where log_id = #{logId}
+    </select>
+        
+    <insert id="insertProLog" parameterType="ProLog" useGeneratedKeys="true" keyProperty="logId">
+        insert into pro_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="method != null">method,</if>
+            <if test="packageName != null">package_name,</if>
+            <if test="className != null">class_name,</if>
+            <if test="requstName != null">requst_name,</if>
+            <if test="ip != null">ip,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="method != null">#{method},</if>
+            <if test="packageName != null">#{packageName},</if>
+            <if test="className != null">#{className},</if>
+            <if test="requstName != null">#{requstName},</if>
+            <if test="ip != null">#{ip},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProLog" parameterType="ProLog">
+        update pro_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="method != null">method = #{method},</if>
+            <if test="packageName != null">package_name = #{packageName},</if>
+            <if test="className != null">class_name = #{className},</if>
+            <if test="requstName != null">requst_name = #{requstName},</if>
+            <if test="ip != null">ip = #{ip},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where log_id = #{logId}
+    </update>
+
+    <delete id="deleteProLogByLogId" parameterType="Long">
+        delete from pro_log where log_id = #{logId}
+    </delete>
+
+    <delete id="deleteProLogByLogIds" parameterType="String">
+        delete from pro_log where log_id in 
+        <foreach item="logId" collection="array" open="(" separator="," close=")">
+            #{logId}
+        </foreach>
+    </delete>
+</mapper>
