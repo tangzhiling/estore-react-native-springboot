@@ -1,17 +1,5 @@
 /*
- Navicat Premium Data Transfer
 
- Source Server         : 47.92.169.73_商城后台接口
- Source Server Type    : MySQL
- Source Server Version : 50650
- Source Host           : 47.92.169.73:3306
- Source Schema         : scapp
-
- Target Server Type    : MySQL
- Target Server Version : 50650
- File Encoding         : 65001
-
- Date: 22/11/2023 18:37:11
 */
 
 SET NAMES utf8mb4;

@@ -51,6 +51,12 @@
                 <version>${druid.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>2.2.2</version>
+            </dependency>
+
             <!-- 解析客户端操作系统、浏览器等 -->
             <dependency>
                 <groupId>eu.bitwalker</groupId>
@@ -137,35 +143,35 @@
             <!-- 定时任务-->
             <dependency>
                 <groupId>com.estore</groupId>
-                <artifactId>huizu-quartz</artifactId>
+                <artifactId>estore-quartz</artifactId>
                 <version>3.8.6</version>
             </dependency>
 
             <!-- 代码生成-->
             <dependency>
-                <groupId>com.huizu</groupId>
-                <artifactId>huizu-generator</artifactId>
-                <version>${huizu.version}</version>
+                <groupId>com.estore</groupId>
+                <artifactId>estore-generator</artifactId>
+                <version>${estore.version}</version>
             </dependency>
 
             <!-- 核心模块-->
             <dependency>
-                <groupId>com.huizu</groupId>
-                <artifactId>huizu-framework</artifactId>
-                <version>${huizu.version}</version>
+                <groupId>com.estore</groupId>
+                <artifactId>estore-framework</artifactId>
+                <version>3.8.6</version>
             </dependency>
 
             <!-- 系统模块-->
             <dependency>
-                <groupId>com.huizu</groupId>
-                <artifactId>huizu-system</artifactId>
-                <version>${huizu.version}</version>
+                <groupId>com.estore</groupId>
+                <artifactId>estore-system</artifactId>
+                <version>${estore.version}</version>
             </dependency>
 
             <!-- 通用工具-->
             <dependency>
-                <groupId>com.huizu</groupId>
-                <artifactId>huizu-common</artifactId>
+                <groupId>com.estore</groupId>
+                <artifactId>estore-common</artifactId>
                 <version>3.8.6</version>
             </dependency>
 
