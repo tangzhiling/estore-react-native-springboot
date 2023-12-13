@@ -17,10 +17,6 @@ import java.util.List;
 
 public class OssUtil {
 	
-	private static String endpoint="http://oss-cn-beijing.aliyuncs.com";
-	private static String accessKeyId="LTAI5t8fd8DM8damtpTJoDm6";
-	private static String accessKeySecret="44mIcFKTISsUq6WvEYzhieczPmSRFe";
-	private static String backName="pinchanxcx";
 	public static String uploadIimage(MultipartFile file) throws IOException {
 
 		System.out.println(file);
