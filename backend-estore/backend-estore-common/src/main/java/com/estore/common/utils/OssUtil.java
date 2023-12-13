@@ -16,7 +16,11 @@ import java.util.List;
 
 
 public class OssUtil {
-	
+
+	private static String endpoint="";
+	private static String accessKeyId="";
+	private static String accessKeySecret="";
+	private static String backName="";
 	public static String uploadIimage(MultipartFile file) throws IOException {
 
 		System.out.println(file);
